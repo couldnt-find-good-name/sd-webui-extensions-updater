@@ -7,7 +7,11 @@ echo ---
 for /f %%d in ('dir /B /A:D %CD%') do (
     call :colored %%d: Green
     cd "%CD%\%%d"
-    git pull
+    rd /s /q .git\refs\original
+    rd /s /q .git\logs\
+    git reflog expire --expire=now --all
+    git gc --prune=now
+    git gc --aggressive --prune=now
     echo ---
     cd..
 )
